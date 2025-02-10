@@ -81,19 +81,7 @@ class NeuralNet:
         weights: List[List[float]],
         is_hidden_layer: bool,
     ) -> List[float]:
-        """Compute one step of forward propagation (calculate activations of layer x+1
-        given activations of layer x and weights from x -> x+1)
 
-        Args:
-            curr_layer - activations of current layer
-            num_next_layer - number of nodes in next layer
-            weights - matrix of weights from current layer to next layer
-            is_hidden_layer - whether or not the next layer is a hidden layer, if so
-                need to adjust iterations to not affect bias unit of next layer
-
-        Returns:
-            computed next layer from current layer and weights
-        """
         # 1.0 so that bias is set correctly
         next_layer: List[float] = [1.0] * num_next_layer
 
@@ -114,47 +102,13 @@ class NeuralNet:
     I = List[Any]
 
     def test(self, data: List[I]) -> List[Tuple[I, List[Any]]]:
-        """Tests the neural net on a list of values
 
-        Tricky type signature:
-
-        Takes a list of inputs where each input is a list of ints of floats (using type
-        hint of Any as Python typing is still relatively new and has issues with
-        restraining types to int or float). The return type is a list of (input, output)
-        tuples where output is again a list of ints or float.
-
-        Args:
-            data - list of inputs where each input is a list of ints or floats
-
-        Returns:
-            list of (input, output) tuples where input is the passed in list while
-            output is a list of the neural net's output
-        """
         return [(_in, self.evaluate(_in)) for _in in data]
 
     O = List[Any]
 
     def test_with_expected(self, data: List[Tuple[I, O]]) -> List[Tuple[I, O, O]]:
-        """Tests the neural net on a list of values for which one has ground truth or
-        expected results.
 
-        Tricky type signature:
-
-        Takes a list of (input, output) tuples where input and output are each lists
-        themselves. These can be lists of ints of floats (using type hint of Any as
-        Python typing is still relatively new and has issues with restraining types to
-        int or float). The return type is a list of (input, expected output, actual
-        output) triples.
-
-        Args:
-            data - list of (input, output) tuples where input and output are each lists
-                of ints or floats
-
-        Returns:
-            list of (input, expected output, actual output) triples where input and
-            output are the passed in lists while actual output is a list of the neural
-            net's output
-        """
         return [(_in, expected, self.evaluate(_in)) for _in, expected in data]
 
     def train(
@@ -165,16 +119,7 @@ class NeuralNet:
         iters: int = 1000,
         print_interval: int = 100,
     ) -> None:
-        """Carries out a training cycle on the neural net
 
-        Args:
-            data - list of (input, output) tuples where input and output are each lists
-                of ints or floats
-            learning_rate - scaling factor to apply to derivatives
-            momentum_factor - how much influence to give momentum from past updates
-            iters - number of iterations to run
-            print_interval - how often to print error
-        """
 
         def one_pass():
             """Computes a single backpropagation pass"""
@@ -215,20 +160,7 @@ class NeuralNet:
         learning_rate: float,
         momentum_factor: float,
     ):
-        """The algorithm for adjusting weights
 
-        Computes influence of each node based on derivatives to determine how to adjust
-        weights.
-
-        Args:
-            inputs - list of input activations (int or float)
-            desired_result - expected results
-            learning_rate - scaling factor to apply to derivatives
-            momentum_factor - how much influence to give momentum from past updates
-
-        Returns:
-            error of the pass
-        """
         # carry out the forward pass to get actual output
         outputs = self.evaluate(inputs)
 
@@ -272,19 +204,11 @@ class NeuralNet:
         return 0.5 * square_errors
 
     def get_ih_weights(self) -> List[List[float]]:
-        """Gets the input-hidden weights as a list of lists
 
-        Returns:
-            input layer -> hidden layer weights
-        """
         return self.ih_weights
 
     def get_ho_weights(self) -> List[List[float]]:
-        """Gets the input-hidden weights as a list of lists
 
-        Returns:
-            hidden layer -> output layer weights
-        """
         return self.ho_weights
 
     def switch_activations(self) -> None:
